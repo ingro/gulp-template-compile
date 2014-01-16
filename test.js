@@ -51,7 +51,6 @@ it('should support supplying a custom namespace', function (cb) {
 	});
 
 	stream.on('data', function (file) {
-		console.log(file.contents.toString());
 		assert(/window\["customNS"\]/.test(file.contents.toString()));
 		cb();
 	});
