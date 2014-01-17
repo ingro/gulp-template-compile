@@ -7,6 +7,10 @@
     "name": "Ingruz",
     "email": "psychobear42@gmail.com"
   },
+  "repository" : {
+    "type" : "git",
+    "url" : "http://github.com/ingro/gulp-template-compile.git"
+  },
   "engines": {
     "node": ">=0.10.0"
   },
