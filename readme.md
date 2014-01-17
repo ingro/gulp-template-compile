@@ -1,6 +1,10 @@
 # [gulp](https://github.com/wearefractal/gulp)-template-compile
 
-> Compile [Lo-Dash templates](http://lodash.com/docs#template)
+> Compile [Lo-Dash templates](http://lodash.com/docs#template) (should work with [Underscore templates](http://underscorejs.org/#template) too).
+
+## Synopsis
+
+This plugin is heavily inspired by [Sindre Sorhus](https://github.com/sindresorhus)'s [gulp-nunjucks](https://github.com/sindresorhus/gulp-nunjucks) plugin, in fact I used it as skeleton for creating this one.
 
 ## Install
 

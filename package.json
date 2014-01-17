@@ -3,12 +3,6 @@
   "version": "0.1.0",
   "description": "Gulp task to precompile lodash templates",
   "main": "index.js",
-  "keywords": [
-    "Gulp",
-    "Lodash",
-    "Template",
-    "Compile"
-  ],
   "author": {
     "name": "Ingruz",
     "email": "psychobear42@gmail.com"
