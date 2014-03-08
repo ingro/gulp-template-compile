@@ -8,7 +8,7 @@ This plugin is heavily inspired by [Sindre Sorhus](https://github.com/sindresorh
 
 ## Install
 
-Install with [npm](https://npmjs.org/package/gulp-template)
+Install with [npm](https://www.npmjs.org/package/gulp-template-compile)
 
 ```
 npm install --save-dev gulp-template-compile
