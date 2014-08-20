@@ -31,13 +31,15 @@ module.exports = function (options) {
 			return callback();
 		}
 
+		var filePath = file.path;
+
 		try {
 			var compiled = compiler(file);
 
 			file.contents = new Buffer(compiled);
 			file.path = gutil.replaceExtension(file.path, '.js');
 		} catch (err) {
-			this.emit('error', new PluginError(PLUGIN_NAME, err));
+			this.emit('error', new PluginError(PLUGIN_NAME, err, {fileName: filePath}));
 			return callback();
 		}
 
