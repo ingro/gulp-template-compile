@@ -31,7 +31,7 @@ module.exports = function (options) {
 	function compiler (file) {
 		var name = typeof options.name === 'function' && options.name(file) || file.relative;
 		var namespace = getNamespaceDeclaration(options.namespace || 'JST');
-    var templateHeader = '(function() {\n' + namespace.declaration;
+    		var templateHeader = '(function() {\n' + namespace.declaration;
 
 		var NSwrapper = '\n\n' + namespace.namespace + '["'+ name.replace(/\\/g, '/') +'"] = ';
 
