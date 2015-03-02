@@ -6,17 +6,38 @@ var PluginError = gutil.PluginError;
 
 var PLUGIN_NAME = 'gulp-template-compile';
 
+var getNamespaceDeclaration = function(ns) {
+  var output = [];
+  var curPath = 'window';
+  if (ns !== 'window') {
+    var nsParts = ns.split('.');
+    nsParts.forEach(function(curPart, index) {
+      if (curPart !== 'window') {
+        curPath += '[' + JSON.stringify(curPart) + ']';
+        output.push(curPath + ' = ' + curPath + ' || {};');
+      }
+    });
+  }
+
+  return {
+    namespace: curPath,
+    declaration: output.join('\n')
+  };
+};
+
 module.exports = function (options) {
 	options = options || {};
 
 	function compiler (file) {
 		var name = typeof options.name === 'function' && options.name(file) || file.relative;
-		var namespace = options.namespace || 'JST';
-		var NSwrapper = '(function() {(window["'+ namespace +'"] = window["'+ namespace +'"] || {})["'+ name.replace(/\\/g, '/') +'"] = ';
+		var namespace = getNamespaceDeclaration(options.namespace || 'JST');
+    		var templateHeader = '(function() {\n' + namespace.declaration;
+
+		var NSwrapper = '\n\n' + namespace.namespace + '["'+ name.replace(/\\/g, '/') +'"] = ';
 
 		var template = tpl(file.contents.toString(), false, options.templateSettings).source;
 
-		return NSwrapper + template + '})();';
+		return templateHeader + NSwrapper + template + '})();';
 	}
 
 	var stream = through.obj(function (file, enc, callback) {
