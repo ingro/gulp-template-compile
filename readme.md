@@ -74,7 +74,7 @@ Default: null
 ## Changelog
 
 #### 1.0:
-* Added support for dotted namespaces.
+* **BREAKING**: Added support for custom dotted namespaces.
 
 ## Notes
 
