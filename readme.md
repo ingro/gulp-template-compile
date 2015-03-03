@@ -63,7 +63,7 @@ Example:
 Type: `String`
 Default: 'JST'
 
-The namespace in which the precompiled templates will be assigned. Starting from version **1.0** you could also provide a dotted namespace that will be correctly handled. For example 'custom.namespace' will result in `window['custom']['namespace']`.
+The namespace in which the precompiled templates will be assigned. Starting from version **1.0** you could also provide a dotted namespace that will be correctly handled, thanks to **fhawkes**. For example 'custom.namespace' will result in `window['custom']['namespace']`.
 
 #### options.templateSettings
 Type: `Object`
@@ -73,7 +73,7 @@ Default: null
 
 ## Changelog
 
-#### 1.0
+#### 1.0:
 * Added support for dotted namespaces.
 
 ## Notes
