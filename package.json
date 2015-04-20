@@ -1,15 +1,15 @@
 {
   "name": "gulp-template-compile",
-  "version": "1.0.1",
+  "version": "1.1.0",
   "description": "Gulp task to precompile lodash templates",
   "main": "index.js",
   "author": {
     "name": "Ingruz",
     "email": "psychobear42@gmail.com"
   },
-  "repository" : {
-    "type" : "git",
-    "url" : "http://github.com/ingro/gulp-template-compile.git"
+  "repository": {
+    "type": "git",
+    "url": "http://github.com/gasp/gulp-template-compile.git"
   },
   "engines": {
     "node": ">=0.10.0"
@@ -32,7 +32,7 @@
   "license": "MIT",
   "dependencies": {
     "gulp-util": "~3.0.0",
-    "lodash.template": "3.3.0",
+    "lodash.template": "^3.5.0",
     "through2": "~0.5.1"
   },
   "devDependencies": {
