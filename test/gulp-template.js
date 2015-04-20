@@ -1,6 +1,7 @@
 /* global describe, it */
 
-'use strict';
+// using 'with' from lodash.template is not compliant with strict mode
+// 'use strict';
 
 var fs = require('fs');
 var path = require('path');
@@ -107,6 +108,165 @@ describe('gulp-template-compile', function() {
       });
     });
 
-  });
+    var ts = {
+      // <%-escape%>
+      // becomes {{{ }}}
+      // between {{{ and }}} <p>hello</p> becomes &lt;p&gt;hello&lt;p&gt;
+      escape:      /\{\{\{([\s\S]+?)\}\}\}/g,
+      // <%evaluate%>
+      // becomes {{# }}
+      // {{# console.log("blah") }}
+      evaluate:    /\{\{#([\s\S]+?)\}\}/g,
+      // <%=interpolate%>
+      // becomes {{ }}
+      // <b>hello</b> becomes <b>hello</b>
+      interpolate: /\{\{[^#\{]([\s\S]+?)[^\}]\}\}/g,
+      variable: 'o'
+    };
 
+    var fixtures = [
+      {
+        name: 'simple',
+        options: {
+          templateSettings: ts,
+          namespace: 'ns',
+          name: function() {
+            return 'simple';
+          }
+        },
+        data: {message: 'plop'},
+        method: '\n\nns[\"simple\"] = function(o) {\nvar __t, __p = \'\';\n__p += \'<p>\' +\n((__t = (o.message)) == null ? \'\' : __t) +\n\'</p>\';\nreturn __p\n};',
+        result: '<p>plop</p>',
+      },
+      {
+        name: 'multiple',
+        options: {
+          templateSettings: ts,
+          namespace: 'ns',
+          name: function() {
+            return 'multiple';
+          }
+        },
+        data: {fname: 'bob', lname: 'dylan'},
+        method: 'i am lazy',
+        result: '<p>bob <b>dylan</b></p>'
+      },
+      {
+        name: 'sub_objects',
+        options: {
+          templateSettings: ts,
+          namespace: 'ns',
+          name: function() {
+            return 'sub_objects';
+          }
+        },
+        data: {identity: {firstname: 'Chad', lastname: 'Smith'}, job: {title: 'Musician', description: 'RHCP'}},
+        method: 'i am lazy',
+        result: '<div><p>first name Chad</p><p>last name Smith</p><p>job title Musician</p><p>job decription RHCP</p></div>'
+      },
+      {
+        name: 'ignore_erb',
+        options: {
+          templateSettings: ts,
+          namespace: 'ns',
+          name: function() {
+            return 'ignore_erb';
+          }
+        },
+        data: {},
+        method: 'i am lazy',
+        result: '<p><% o.ignore me %></p>'
+      },
+      {
+        name: 'ignore_mismatch',
+        options: {
+          templateSettings: ts,
+          namespace: 'ns',
+          name: function() {
+            return 'ignore_mismatch';
+          }
+        },
+        data: {something: 'else'},
+        method: 'i am lazy',
+        result: '<p></p>'
+      },
+      {
+        name: 'condition',
+        options: {
+          templateSettings: ts,
+          namespace: 'ns',
+          name: function() {
+            return 'condition';
+          }
+        },
+        data: {message: 'hello'},
+        method: 'i am lazy',
+        result: '<p><b>hello</b></p>'
+      },
+      {
+        name: 'condition',
+        options: {
+          templateSettings: ts,
+          namespace: 'ns',
+          name: function() {
+            return 'condition';
+          }
+        },
+        data: {nomessage: 'not hello'},
+        method: 'i am lazy',
+        result: '<p><i>nothing</i></p>'
+      },
+      {
+        name: 'evaluate',
+        options: {
+          templateSettings: ts,
+          namespace: 'ns',
+          name: function() {
+            return 'evaluate';
+          }
+        },
+        data: {is: true},
+        method: 'i am lazy',
+        result: '<p>yes</p>'
+      }
+    ];
+    for (var i = 0; i < fixtures.length; i++) {
+      it('should pass fixture: ' + fixtures[i].name, function(done) {
+        var that = this;
+        var pathname = path.join(__dirname, 'fixtures', that.fix.name + '.html');
+        fs.createReadStream(pathname).pipe(through(function(chunk, enc, callback) {
+          // create a fake input file
+          var fileIn = new gutil.File({
+            base: __dirname,
+            path: pathname,
+            contents: chunk
+          });
+
+          var myTemplate = templater(that.fix.options);
+
+          myTemplate.on('data', function(d) {
+
+            if(that.fix.method !== 'i am lazy') {
+              assert.equal(that.fix.method, d.contents.toString());
+            }
+
+            var unsafe = ';var ns = {};'
+              + d.contents.toString() 
+              + '\nns["' + that.fix.name + '"]('
+              + JSON.stringify(that.fix.data)
+              + ')';
+
+            assert.equal(eval(unsafe), that.fix.result);
+
+
+            // console.log(chunk.toString(), d.contents.toString());
+
+            done();
+          });
+          myTemplate.write(fileIn);
+          callback();
+        })); // fs
+      }.bind({fix: fixtures[i]})); // it
+    }
+  });
 });

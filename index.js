@@ -30,14 +30,23 @@ module.exports = function (options) {
     options = options || {};
 
     function compiler (file) {
-        var name = typeof options.name === 'function' && options.name(file) || file.relative;
-        var namespace = getNamespaceDeclaration(options.namespace || 'JST');
+        var name = null;
+        if(typeof(options.name) === 'function') {
+            name = options.name(file);
+
+        }
+        else {
+            name = file.relative;
+        }
+
+        var namespace = getNamespaceDeclaration(options.namespace || 'tpl');
         // var templateHeader = '(function() {\n' + namespace.declaration;
 
         var NSwrapper = '\n\n' + namespace.namespace + '["'+ name.replace(/\\/g, '/') +'"] = ';
 
         var template = tpl(file.contents.toString(), false, options.templateSettings).source;
 
+        // console.log(NSwrapper + template + ';');
         return NSwrapper + template + ';';
     }
 
@@ -53,20 +62,24 @@ module.exports = function (options) {
             return callback();
         }
 
-        var filePath = file.path;
+        if(file.isBuffer()) {
+            var filePath = file.path;
 
-        try {
-            var compiled = compiler(file);
+            try {
+                var compiled = compiler(file);
 
-            file.contents = new Buffer(compiled);
-            file.path = gutil.replaceExtension(file.path, '.js');
-        } catch (err) {
-            this.emit('error', new PluginError(PLUGIN_NAME, err, {fileName: filePath}));
-            return callback();
+                file.contents = new Buffer(compiled);
+                file.path = gutil.replaceExtension(file.path, '.js');
+            } catch (err) {
+                this.emit('error', new PluginError(PLUGIN_NAME, err, {fileName: filePath}));
+                return callback();
+            }
+
+            this.push(file);
+            callback();
         }
 
-        this.push(file);
-        callback();
+
     });
 
     return stream;
