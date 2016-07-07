@@ -35,7 +35,7 @@ module.exports = function (options) {
 
         var NSwrapper = '\n\n' + namespace.namespace + '["'+ name.replace(/\\/g, '/') +'"] = ';
 
-        var template = tpl(file.contents.toString(), false, options.templateSettings).source;
+        var template = tpl(file.contents.toString(), options.templateSettings).source;
 
         return templateHeader + NSwrapper + template + '})();';
     }
