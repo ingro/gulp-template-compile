@@ -1,6 +1,6 @@
 {
   "name": "gulp-template-compile",
-  "version": "1.2.0",
+  "version": "1.2.1",
   "description": "Gulp task to precompile lodash templates",
   "main": "index.js",
   "author": {
