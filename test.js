@@ -80,3 +80,66 @@ it('should support dot paths in namespace', function (cb) {
 		contents: new Buffer('<h1><%= test %></h1>')
 	}));
 });
+
+it('shouldn´t generate IIFE encapsulation', function(cb) {
+
+	var stream = tpl(
+	{
+		IIFE:false
+	});
+
+	stream.on('data', function (file) {
+		assert.equal(file.path, __dirname + '\\fixture\\fixture.js');
+		assert.equal(file.relative, 'fixture\\fixture.js');
+		assert.equal(/\(function\(\) \{/.test(file.contents.toString()),false);
+		assert.equal(/\}\)\(\);/.test(file.contents.toString()),false);
+		cb();
+	});
+
+	stream.write(new gutil.File({
+		base: __dirname,
+		path: __dirname + '/fixture/fixture.html',
+		contents: new Buffer('<h1><%= test %></h1>')
+	}));
+});
+
+it('should generate IIFE encapsulation with specific configuration', function(cb) {
+
+	var stream = tpl(
+	{
+		IIFE:true
+	});
+
+	stream.on('data', function (file) {
+		assert.equal(file.path, __dirname + '\\fixture\\fixture.js');
+		assert.equal(file.relative, 'fixture\\fixture.js');
+		assert(/\(function\(\) \{/.test(file.contents.toString()));
+		assert(/\}\)\(\);/.test(file.contents.toString()));
+		cb();
+	});
+
+	stream.write(new gutil.File({
+		base: __dirname,
+		path: __dirname + '/fixture/fixture.html',
+		contents: new Buffer('<h1><%= test %></h1>')
+	}));
+});
+
+it('should generate IIFE encapsulation without configuration', function(cb) {
+
+	var stream = tpl();
+
+	stream.on('data', function (file) {
+		assert.equal(file.path, __dirname + '\\fixture\\fixture.js');
+		assert.equal(file.relative, 'fixture\\fixture.js');
+		assert(/\(function\(\) \{/.test(file.contents.toString()));
+		assert(/\}\)\(\);/.test(file.contents.toString()));
+		cb();
+	});
+
+	stream.write(new gutil.File({
+		base: __dirname,
+		path: __dirname + '/fixture/fixture.html',
+		contents: new Buffer('<h1><%= test %></h1>')
+	}));
+});
