@@ -24,10 +24,10 @@ var template = require('gulp-template-compile');
 var concat = require('gulp-concat');
 
 gulp.task('default', function () {
-	gulp.src('src/*.html')
-		.pipe(template())
-		.pipe(concat('templates.js'))
-		.pipe(gulp.dest('dist'));
+    gulp.src('src/*.html')
+        .pipe(template())
+        .pipe(concat('templates.js'))
+        .pipe(gulp.dest('dist'));
 });
 ```
 
@@ -53,9 +53,9 @@ Example:
 
 ```js
 {
-	name: function (file) {
-		return 'tpl-' + file.relative;
-	}
+    name: function (file) {
+        return 'tpl-' + file.relative;
+    }
 }
 ```
 
@@ -71,9 +71,18 @@ Default: null
 
 [Lo-Dash `_.template` options](http://lodash.com/docs#template).
 
+#### options.IIFE
+Type: 'Boolean'
+Default: null
+
+Wrap each precompiled template with an [IIFE](https://en.wikipedia.org/wiki/Immediately-invoked_function_expression). If you don't need it simply set this option to `false`.
+
 ## Changelog
 
-#### 1.0:
+#### 1.3.0:
+* **FEATURE**: Added `options.IIFE` [#14](https://github.com/ingro/gulp-template-compile/pull/14)
+
+#### 1.0.0:
 * **BREAKING**: Added support for custom dotted namespaces.
 
 ## Notes
