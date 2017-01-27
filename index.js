@@ -31,13 +31,16 @@ module.exports = function (options) {
     function compiler (file) {
         var name = typeof options.name === 'function' && options.name(file) || file.relative;
         var namespace = getNamespaceDeclaration(options.namespace || 'JST');
-        var templateHeader = '(function() {\n' + namespace.declaration;
+		var IIFE_start = options.IIFE !== false ? '(function() {\n':'';
+		var IIFE_end = options.IIFE !== false ? '})();':'';
+		
+        var templateHeader = IIFE_start + namespace.declaration;
 
         var NSwrapper = '\n\n' + namespace.namespace + '["'+ name.replace(/\\/g, '/') +'"] = ';
 
         var template = tpl(file.contents.toString(), options.templateSettings).source;
 
-        return templateHeader + NSwrapper + template + '})();';
+        return templateHeader + NSwrapper + template + IIFE_end;
     }
 
     var stream = through.obj(function (file, enc, callback) {
