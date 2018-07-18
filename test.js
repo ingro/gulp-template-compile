@@ -1,6 +1,6 @@
 'use strict';
 var assert = require('assert');
-var gutil = require('gulp-util');
+var Vinyl = require('vinyl');
 var tpl = require('./index');
 
 it('should precompile lodash templates', function(cb) {
@@ -15,7 +15,7 @@ it('should precompile lodash templates', function(cb) {
 		cb();
 	});
 
-	stream.write(new gutil.File({
+	stream.write(new Vinyl({
 		base: __dirname,
 		path: __dirname + '/fixture/fixture.html',
 		contents: new Buffer('<h1><%= test %></h1>')
@@ -36,7 +36,7 @@ it('should support supplying custom name in a callback', function (cb) {
 		cb();
 	});
 
-	stream.write(new gutil.File({
+	stream.write(new Vinyl({
 		base: __dirname,
 		path: __dirname + '/fixture/fixture.html',
 		contents: new Buffer('<h1><%= test %></h1>')
@@ -55,7 +55,7 @@ it('should support supplying a custom namespace', function (cb) {
 		cb();
 	});
 
-	stream.write(new gutil.File({
+	stream.write(new Vinyl({
 		base: __dirname,
 		path: __dirname + '/fixture/fixture.html',
 		contents: new Buffer('<h1><%= test %></h1>')
@@ -74,7 +74,7 @@ it('should support dot paths in namespace', function (cb) {
 		cb();
 	});
 
-	stream.write(new gutil.File({
+	stream.write(new Vinyl({
 		base: __dirname,
 		path: __dirname + '/fixture/fixture.html',
 		contents: new Buffer('<h1><%= test %></h1>')
@@ -96,7 +96,7 @@ it('shouldn´t generate IIFE encapsulation', function(cb) {
 		cb();
 	});
 
-	stream.write(new gutil.File({
+	stream.write(new Vinyl({
 		base: __dirname,
 		path: __dirname + '/fixture/fixture.html',
 		contents: new Buffer('<h1><%= test %></h1>')
@@ -118,7 +118,7 @@ it('should generate IIFE encapsulation with specific configuration', function(cb
 		cb();
 	});
 
-	stream.write(new gutil.File({
+	stream.write(new Vinyl({
 		base: __dirname,
 		path: __dirname + '/fixture/fixture.html',
 		contents: new Buffer('<h1><%= test %></h1>')
@@ -137,7 +137,7 @@ it('should generate IIFE encapsulation without configuration', function(cb) {
 		cb();
 	});
 
-	stream.write(new gutil.File({
+	stream.write(new Vinyl({
 		base: __dirname,
 		path: __dirname + '/fixture/fixture.html',
 		contents: new Buffer('<h1><%= test %></h1>')
