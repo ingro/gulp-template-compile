@@ -1,8 +1,8 @@
 'use strict';
-var gutil = require('gulp-util');
 var through = require('through2');
 var tpl = require('lodash.template');
-var PluginError = gutil.PluginError;
+var PluginError = require('plugin-error');
+var replaceExtension = require('replace-ext');
 
 var PLUGIN_NAME = 'gulp-template-compile';
 
@@ -33,7 +33,7 @@ module.exports = function (options) {
         var namespace = getNamespaceDeclaration(options.namespace || 'JST');
 		var IIFE_start = options.IIFE !== false ? '(function() {\n':'';
 		var IIFE_end = options.IIFE !== false ? '})();':'';
-		
+
         var templateHeader = IIFE_start + namespace.declaration;
 
         var NSwrapper = '\n\n' + namespace.namespace + '["'+ name.replace(/\\/g, '/') +'"] = ';
@@ -61,7 +61,7 @@ module.exports = function (options) {
             var compiled = compiler(file);
 
             file.contents = new Buffer(compiled);
-            file.path = gutil.replaceExtension(file.path, '.js');
+            file.path = replaceExtension(file.path, '.js');
         } catch (err) {
             this.emit('error', new PluginError(PLUGIN_NAME, err, {fileName: filePath}));
             return callback();
