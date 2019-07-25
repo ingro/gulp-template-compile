@@ -1,6 +1,6 @@
 {
   "name": "gulp-template-compile",
-  "version": "1.4.0",
+  "version": "1.5.0",
   "description": "Gulp task to precompile lodash templates",
   "main": "index.js",
   "author": {
@@ -31,10 +31,10 @@
   ],
   "license": "MIT",
   "dependencies": {
-    "lodash.template": "~4.4.0",
+    "lodash.template": "~4.5.0",
     "plugin-error": "^1.0.1",
     "replace-ext": "^1.0.0",
-    "through2": "~0.6.1"
+    "through2": "~3.0.1"
   },
   "devDependencies": {
     "mocha": "*",
